@@ -101,7 +101,7 @@ const App = () => {
             </header>
 
             {/* Content Area */}
-            <main className="relative flex items-top justify-center pt-24 min-h-screen mx-auto">
+            <main className="relative flex items-top justify-center pt-24 min-h-screen mx-auto px-4 md:px-0 overflow-x-hidden w-full">
                 <div className="max-w-6xl w-full">
                     {slides[currentSlide].isMockup ? (
                         <div className="animate-in fade-in zoom-in duration-700">
@@ -112,19 +112,19 @@ const App = () => {
                                 <p className="text-slate-400 italic">{slides[currentSlide].subtitle}</p>
                             </div>
                             <img
-                                src="/intention-design-hp-axalys.webp"
+                                src="/mockup-site.png"
                                 alt="Maquette du site Axalys"
                                 className="w-full h-auto rounded-xl shadow-2xl border border-white/10"
                             />
                         </div>
                     ) : (
-                        <div className="grid md:grid-cols-2 gap-16 items-center animate-in slide-in-from-right-8 duration-500">
-                            <div className="flex flex-col gap-8">
+                        <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center animate-in slide-in-from-right-8 duration-500">
+                            <div className="flex flex-col gap-8 order-2 md:order-1">
                                 <div className="flex flex-col gap-2">
-                                    <h1 className="text-6xl font-black leading-tight tracking-tighter">
+                                    <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tighter">
                                         {slides[currentSlide].title}
                                     </h1>
-                                    <p className="text-2xl text-[#00ade3] font-medium italic">
+                                    <p className="text-xl md:text-2xl text-[#00ade3] font-medium italic">
                                         {slides[currentSlide].subtitle}
                                     </p>
                                 </div>
@@ -194,14 +194,14 @@ const App = () => {
                             </div>
 
                             {/* Visual Component on the right */}
-                            <div className="hidden md:flex justify-center items-center">
+                            <div className="flex justify-center items-center order-1 md:order-2 mb-8 md:mb-0">
                                 <div className="relative group">
                                     <div className="absolute -inset-20 bg-gradient-to-tr from-[#e50554]/20 via-[#00ade3]/20 to-[#f7ab00]/20 blur-[100px] rounded-full animate-pulse"></div>
                                     <div className="relative p-16 bg-white/5 rounded-full border border-white/10 backdrop-blur-3xl shadow-2xl transform transition-transform duration-700 group-hover:rotate-12">
                                         {slides[currentSlide].id === 'intro' ? (
                                             slides[currentSlide].icon
                                         ) : (
-                                            React.cloneElement(slides[currentSlide].icon, { className: "w-48 h-48 opacity-20" })
+                                            React.cloneElement(slides[currentSlide].icon, { className: "w-32 h-32 md:w-48 md:h-48 opacity-20" })
                                         )}
                                     </div>
                                 </div>
