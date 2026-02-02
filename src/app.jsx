@@ -13,11 +13,24 @@ import {
     Printer,
     Sparkles,
     Server,
-    X
+    X,
+    BotIcon
 } from 'lucide-react';
 
 const parsePrice = (priceStr) => {
     return parseInt(priceStr.replace(/\D/g, ''), 10) || 0;
+};
+
+const COMPANY_INFO = {
+    name: "Yoann Barthalay",
+    email: "yoann@yobart.com",
+    phone: "+33 6 33 17 24 72",
+    website: "yobart.com",
+    address: "716 CHEMIN DES SOLANS, 13400 AUBAGNE",
+    tva: "FR91890265994",
+    siret: "89026599400016",
+    immatriculation: "RCS Marseille 890 265 994",
+    ape: "7022Z"
 };
 
 const SLIDES_DATA = [
@@ -26,7 +39,7 @@ const SLIDES_DATA = [
         title: "Refonte Digitale Axalys",
         subtitle: "(ré)inventons votre présence en ligne.",
         icon: <img src="logo-axalys.png" className="w-32 md:w-48 h-auto" alt="Logo Axalys" />,
-        content: "Pour Axalys, nous ne proposons pas un simple site web, mais une véritable plateforme de performance industrielle. L'objectif : aligner votre image numérique sur la précision et l'innovation qui font votre renommée."
+        content: "Plus qu’un simple site vitrine, nous concevons pour Axalys une plateforme de haute précision dédiée à votre univers et correspondant à votre image de marque. L’enjeu : propulser vos accessoires sur le devant de la scène numérique avec la même rigueur technique qui fait votre force au quotidien."
     },
     {
         id: 'besoin',
@@ -34,11 +47,15 @@ const SLIDES_DATA = [
         subtitle: "Une architecture pensée pour l'utilisateur final.",
         icon: <Layout className="w-16 h-16 text-[#00ade3]" />,
         features: [
-            { t: "Homepage Interactive", d: "Un carousel dynamique pilotable pour mettre en avant vos nouveautés et certifications." },
-            { t: "Espace Produits & Archive", d: "Navigation fluide avec filtres intelligents pour trouver la bonne pièce en 2 clics." },
-            { t: "Fiches Techniques Individuelles", d: "Détails complets, vidéos de démonstration et téléchargement direct de PDF." },
-            { t: "Brand Experience (Qui sommes-nous)", d: "Valorisation de votre outil de production, de votre histoire et de votre équipe." },
-            { t: "Contact & Lead Gen", d: "Formulaire qualifié pour transformer chaque visite en opportunité commerciale." }
+            { t: "Homepage Interactive", d: "Un carousel dynamique pilotable pour mettre en avant vos nouveautés." },
+            { t: "Ergonomie & Parcours Client", d: "Parcours utilisateur optimisé pour une navigation intuitive et efficace." },
+            { t: "Espace Produits & Archive", d: "Navigation fluide avec filtres intelligents par familles de produits." },
+            { t: "Fiches Techniques & Vidéos", d: "Intégration de médias et téléchargement direct de documentations PDF." },
+            { t: "Brand Experience", d: "Valorisation de votre outil de production, de votre histoire et de votre équipe." },
+            { t: "Contact & Lead Gen", d: "Formulaire qualifié pour un traitement commercial immédiat." },
+            { t: "Stratégie SEO Sémantique", d: "Optimisation du contenu pour capter le trafic sur vos mots-clés techniques." },
+            { t: "Optimisation GEO (AI Ready)", d: "Structure sémantique conçue pour être citée par les moteurs de recherche IA (ChatGPT, Perplexity...)." }
+
         ]
     },
     {
@@ -47,9 +64,12 @@ const SLIDES_DATA = [
         subtitle: "Moderne, Rapide et Flexible.",
         icon: <Zap className="w-16 h-16 text-[#f7ab00]" />,
         stack: [
-            { name: "Next.js", desc: "Le moteur ultra-performant de votre site web. Cette technologie moderne offrira rapidité éclair et SEO optimisé nativement.", icon: <Rocket size={20} className="text-[#e50554]" /> },
-            { name: "Airtable ou équivalent", desc: "Fini les back-office compliqués on vous propose un backoffice agile. Gérez vos produits aussi simplement que sur Excel avec l'ensemble directement connecté sur votre site.", icon: <Database size={20} className="text-[#00ade3]" /> },
-            { name: "Automatisation", desc: "On automatise vos flux de leads et envoi vos notifications sur le ou les outils de votre choix.", icon: <Settings size={20} className="text-[#009e61]" /> }
+            { name: "Next.js (SSG/ISR)", desc: "Le moteur ultra-performant. Rapidité éclair et mise à jour des pages sans redéploiement.", icon: <Rocket size={20} className="text-[#e50554]" /> },
+            { name: "Airtable (Headless CMS)", desc: "Votre backoffice agile. Gestion du catalogue en toute autonomie.", icon: <Database size={20} className="text-[#00ade3]" /> },
+            { name: "n8n (Workflow Engine)", desc: "Intelligence connectée pour automatiser vos flux de leads et notifications.", icon: <Settings size={20} className="text-[#009e61]" /> },
+            { name: "Optimisation Asset (Edge)", desc: "Gestion optimisée des images et vidéos pour un rendu instantané sur tous les écrans.", icon: <Zap size={20} className="text-[#f7ab00]" /> },
+            { name: "Sécurité Serverless", desc: "Architecture sans serveur limitant drastiquement les surfaces d'attaque potentielles.", icon: <ShieldCheck size={20} className="text-[#009e61]" /> },
+            { name: "Infrastructure Évolutive", desc: "Une base solide prête à intégrer de nouvelles fonctionnalités et outils.", icon: <Server size={20} className="text-[#e50554]" /> }
         ]
     },
     {
@@ -67,14 +87,21 @@ const SLIDES_DATA = [
             { item: "Architecture, Découpage & Stratégie Technique", price: "400 €" },
             { item: "Création du Design UI / UX sur-mesure", price: "800 €" },
             { item: "Développement & Intégration Next.js", price: "1 000 €" },
-            { item: "Mise en place du Back-office (Airtable)", price: "500 €" },
-            { item: "Création du Workflow d'automatisation (n8n)", price: "290 €" },
-            { item: "Maintenance Applicative (Offerte 1 an)", price: "0 €" }
+            { item: "Mise en place du Back-office (sur outil tiers Airtable, Notion ou autre)", price: "500 €" },
+            { item: "Création du Workflow d'automatisation (n8n)", price: "280 €" },
+            { item: "Maintenance Applicative (Offerte 1 an)", promo_price: "0 €", price: "550 €" }
         ],
         extras: [
-            { icon: <Server size={20} />, label: "Hébergement & Nom de domaine", value: "Inclus (Géré par Axalys)" },
-            { icon: <Sparkles size={20} />, label: "Engagement Qualité", value: "Satisfait ou Remboursé" }
+            { icon: <Server size={20} />, label: "Hébergement & Nom de domaine", value: "Géré par Axalys (validation de la configuration)" },
+            { icon: <BotIcon size={20} />, label: "Agent IA", value: "Intégration d'un agent IA pour répondre aux questions des visiteurs" }
         ]
+    },
+    {
+        id: 'contact',
+        title: "Envie de construire votre nouveau site web avec yobart ?",
+        subtitle: "Discutons de votre projet.",
+        buttonText: "Télécharger le devis",
+        buttonLink: "/Devis_000039_YOBART_Axalys_site_Web.pdf"
     }
 ];
 
@@ -100,7 +127,8 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                 <div className="flex items-center gap-6">
                     <img src="/logo-yobart.png" alt="Yobart" className="h-16 w-auto" />
                     <div className="h-6 w-px bg-white/10"></div>
-                    <img src="logo-axalys.png" alt="Axalys" className="h-6 w-auto brightness-0 invert opacity-50" />
+                    <span className="text-white font-bold uppercase tracking-wider text-sm hidden md:block">Refonte site web Axalys</span>
+                    <img src="logo-axalys.png" alt="Axalys" className="h-6 w-auto brightness-0 invert opacity-50 md:hidden" />
                 </div>
             </header>
 
@@ -108,7 +136,38 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
             <main className="relative flex items-start justify-center min-h-screen mx-auto overflow-x-hidden w-full pt-32 px-6 lg:px-0 pb-48">
                 <div className="w-full max-w-6xl h-full">
                     <div key={slide.id} className="h-full relative">
-                        {slide.isMockup ? (
+                        {slide.id === 'contact' ? (
+                            <div className="animate-in fade-in zoom-in duration-500 flex flex-col items-center justify-center h-full text-center">
+                                <div className="mb-8 p-8 bg-white/5 rounded-full border border-white/10 shadow-2xl backdrop-blur-sm">
+                                    <img src="/logo-yobart.png" alt="Yobart" className="h-24 w-auto" />
+                                </div>
+                                <h1 className="text-4xl lg:text-5xl font-black mb-6 max-w-3xl leading-tight">
+                                    {slide.title}
+                                </h1>
+                                <div className="flex flex-col gap-6 items-center mb-12">
+                                    <a
+                                        href={slide.buttonLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-8 py-4 bg-[#e50554] hover:bg-[#e50554]/90 text-white rounded-full font-bold text-lg uppercase tracking-widest shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-3"
+                                    >
+                                        <Download size={24} />
+                                        {slide.buttonText}
+                                    </a>
+                                    <p className="text-slate-400 italic">ou</p>
+                                    <div className="flex flex-col items-center gap-2">
+                                        <p className="font-bold text-xl">{COMPANY_INFO.name}</p>
+                                        <a href={`mailto:${COMPANY_INFO.email}`} className="text-[#00ade3] hover:underline text-lg">{COMPANY_INFO.email}</a>
+                                        <p className="font-mono text-slate-300">{COMPANY_INFO.phone}</p>
+                                    </div>
+                                </div>
+                                <div className="text-xs text-slate-500 font-mono space-y-1">
+                                    <p>{COMPANY_INFO.address}</p>
+                                    <p>SIRET : {COMPANY_INFO.siret} • TVA : {COMPANY_INFO.tva}</p>
+                                    <p>{COMPANY_INFO.immatriculation} • Code APE : {COMPANY_INFO.ape}</p>
+                                </div>
+                            </div>
+                        ) : slide.isMockup ? (
                             <div className="animate-in fade-in zoom-in duration-700 flex flex-col items-center">
                                 <div className="text-center mb-6">
                                     <h2 className="text-3xl font-bold mb-2">{slide.title}</h2>
@@ -133,7 +192,7 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                     </div>
 
                                     {slide.features && (
-                                        <div className="grid gap-3">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                             {slide.features.map((f, i) => (
                                                 <div key={i} className="flex gap-4 items-start p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-[#e50554]/30 transition-all hover:translate-x-2">
                                                     <CheckCircle className="text-[#009e61] shrink-0 mt-1" size={20} />
@@ -147,7 +206,7 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                     )}
 
                                     {slide.stack && (
-                                        <div className="flex flex-col gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {slide.stack.map((s, i) => (
                                                 <div key={i} className="flex items-center gap-5 p-5 bg-white/5 rounded-3xl border border-white/10 group">
                                                     <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform">{s.icon}</div>
@@ -165,15 +224,15 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                             <table className="w-full text-left">
                                                 <thead className="bg-white/5">
                                                     <tr>
-                                                        <th className="p-5 text-[#f7ab00] font-bold text-xs uppercase tracking-widest">Phase du projet</th>
-                                                        <th className="p-5 text-right text-[#f7ab00] font-bold text-xs uppercase tracking-widest">Investissement</th>
+                                                        <th className="p-3 text-[#f7ab00] font-bold text-xs uppercase tracking-widest">Phase du projet</th>
+                                                        <th className="p-3 text-right text-[#f7ab00] font-bold text-xs uppercase tracking-widest">Investissement</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-white/5">
                                                     {slide.pricing.map((p, i) => (
                                                         <tr key={i} className={`hover:bg-white/5 transition-colors ${p.item.includes('Option') ? 'text-[#00ade3] italic' : ''}`}>
-                                                            <td className="p-5 text-sm text-slate-300">{p.item}</td>
-                                                            <td className="p-5 text-right font-mono font-bold">
+                                                            <td className="p-3 text-sm text-slate-300">{p.item}</td>
+                                                            <td className="p-3 text-right font-mono font-bold">
                                                                 {p.promo_price ? (
                                                                     <div className="flex flex-col items-end">
                                                                         <span className="text-xs text-slate-500 line-through decoration-[#e50554]/50">{p.price}</span>
@@ -188,8 +247,8 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                                 </tbody>
                                                 <tfoot className="bg-[#e50554]/20">
                                                     <tr>
-                                                        <td className="p-6 font-black text-xl italic uppercase">Total Projet (HT)</td>
-                                                        <td className="p-6 text-right font-mono font-bold text-3xl text-[#e50554]">{total.toLocaleString('fr-FR').replace(/\s/g, ' ')} €</td>
+                                                        <td className="p-4 font-black text-xl italic uppercase">Total Projet (HT)</td>
+                                                        <td className="p-4 text-right font-mono font-bold text-3xl text-[#e50554]">{total.toLocaleString('fr-FR').replace(/\s/g, ' ')} €</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -197,16 +256,19 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                     )}
 
                                     {slide.extras && (
-                                        <div className="mt-8 grid md:grid-cols-2 gap-4">
-                                            {slide.extras.map((extra, i) => (
-                                                <div key={i} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                                                    <div className="p-3 bg-white/5 rounded-full text-[#f7ab00]">{extra.icon}</div>
-                                                    <div>
-                                                        <p className="font-bold text-sm text-white mb-1">{extra.label}</p>
-                                                        <p className="text-xs text-[#00ade3] font-mono">{extra.value}</p>
+                                        <div className="mt-6">
+                                            <h3 className="font-bold text-[#f7ab00] uppercase tracking-widest text-xs mb-3 pl-1">Extras & infos</h3>
+                                            <div className="grid md:grid-cols-2 gap-4">
+                                                {slide.extras.map((extra, i) => (
+                                                    <div key={i} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                                                        <div className="p-3 bg-white/5 rounded-full text-[#f7ab00]">{extra.icon}</div>
+                                                        <div>
+                                                            <p className="font-bold text-sm text-white mb-1">{extra.label}</p>
+                                                            <p className="text-xs text-[#00ade3] font-mono">{extra.value}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
                                     )}
 
@@ -277,8 +339,8 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                 </div >
 
                 {/* Footer Text */}
-                < p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500" >
-                    Axalys Refonte site web • Février 2026 • Yobart Droits réservés
+                < p className="text-[10px] font-light tracking-[0.2em] text-slate-500" >
+                    Février 2026 • Yobart Droits réservés
                 </p >
             </footer >
         </div >
@@ -310,7 +372,33 @@ const PrintLayout = () => {
 
                         {/* A4 Body - Fluid + Padding */}
                         <div className="flex-1 flex flex-col p-[10mm] overflow-hidden">
-                            {slide.isMockup ? (
+                            {slide.id === 'contact' ? (
+                                <div className="flex flex-col items-center justify-center h-full text-center pt-10">
+                                    <div className="mb-8 scale-150">
+                                        <img src="/logo-yobart.png" alt="Yobart" className="h-16 w-auto" />
+                                    </div>
+                                    <h1 className="text-3xl font-black mb-6 text-balance max-w-lg leading-tight text-white">
+                                        {slide.title}
+                                    </h1>
+                                    <div className="mb-12 p-8 bg-[#e50554]/5 rounded-3xl border border-[#e50554]/20 w-3/4">
+                                        <p className="text-[#f7ab00] font-bold uppercase tracking-widest text-xs mb-4">Contact Direct</p>
+                                        <div className="flex flex-col gap-3">
+                                            <p className="font-bold text-xl text-white">{COMPANY_INFO.name}</p>
+                                            <p className="text-[#00ade3] font-medium">{COMPANY_INFO.email}</p>
+                                            <p className="font-mono text-slate-300">{COMPANY_INFO.phone}</p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-auto border-t border-white/10 pt-6 w-full max-w-md">
+                                        <p className="text-[10px] text-slate-500 font-mono mb-2 uppercase tracking-wide">Informations Légales</p>
+                                        <div className="text-[9px] text-slate-600 space-y-0.5">
+                                            <p>{COMPANY_INFO.address}</p>
+                                            <p>SIRET : {COMPANY_INFO.siret}</p>
+                                            <p>TVA : {COMPANY_INFO.tva}</p>
+                                            <p>{COMPANY_INFO.immatriculation} • APE : {COMPANY_INFO.ape}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : slide.isMockup ? (
                                 <div className="flex flex-col items-center justify-center h-full">
                                     <div className="text-center mb-6">
                                         <h2 className="text-2xl text-white font-bold mb-2">{slide.title}</h2>
