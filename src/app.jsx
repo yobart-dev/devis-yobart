@@ -11,8 +11,14 @@ import {
     CheckCircle,
     Download,
     Printer,
+    Sparkles,
+    Server,
     X
 } from 'lucide-react';
+
+const parsePrice = (priceStr) => {
+    return parseInt(priceStr.replace(/\D/g, ''), 10) || 0;
+};
 
 const SLIDES_DATA = [
     {
@@ -38,38 +44,47 @@ const SLIDES_DATA = [
     {
         id: 'tech',
         title: "La 'Recette' Technique Yobart",
-        subtitle: "Vitesse, Sécurité et Liberté éditoriale.",
+        subtitle: "Moderne, Rapide et Flexible.",
         icon: <Zap className="w-16 h-16 text-[#f7ab00]" />,
         stack: [
-            { name: "Next.js", desc: "Le moteur ultra-performant. Rapidité éclair et SEO optimisé nativement.", icon: <Rocket size={20} className="text-[#e50554]" /> },
-            { name: "Airtable", desc: "Votre backoffice agile. Gérez vos produits aussi simplement qu'un tableur.", icon: <Database size={20} className="text-[#00ade3]" /> },
-            { name: "n8n", desc: "L'invisible qui connecte tout. Automatisation de vos flux de leads et notifications.", icon: <Settings size={20} className="text-[#009e61]" /> }
+            { name: "Next.js", desc: "Le moteur ultra-performant de votre site web. Cette technologie moderne offrira rapidité éclair et SEO optimisé nativement.", icon: <Rocket size={20} className="text-[#e50554]" /> },
+            { name: "Airtable ou équivalent", desc: "Fini les back-office compliqués on vous propose un backoffice agile. Gérez vos produits aussi simplement que sur Excel avec l'ensemble directement connecté sur votre site.", icon: <Database size={20} className="text-[#00ade3]" /> },
+            { name: "Automatisation", desc: "On automatise vos flux de leads et envoi vos notifications sur le ou les outils de votre choix.", icon: <Settings size={20} className="text-[#009e61]" /> }
         ]
     },
     {
         id: 'mockup',
-        title: "Aperçu de votre Futur Site",
-        subtitle: "Immersion dans le design Premium Axalys.",
+        title: "Voici à quoi peut ressembler votre nouveau site web",
+        subtitle: "Ceci est une simple simulation d'inspiration de votre site web.",
         isMockup: true
     },
     {
         id: 'chiffrage',
-        title: "Chiffrage & Engagement",
-        subtitle: "Un investissement clair pour un outil de croissance.",
+        title: "Phasage & Budget",
+        subtitle: "Un investissement structuré pour une solution pérenne.",
         icon: <ShieldCheck className="w-16 h-16 text-[#009e61]" />,
         pricing: [
-            { item: "Stratégie & Architecture UX (Airtable setup)", price: "600€" },
-            { item: "Design UI sur-mesure (Mobile First)", price: "800€" },
-            { item: "Développement Next.js & Optimisation SEO", price: "1100€" },
-            { item: "Automatisations n8n & Tests", price: "500€" },
-            { item: "Option : Assistant Intelligent ✨ (IA)", price: "Sur Devis" },
-            { item: "Hébergement & Maintenance (An 1)", price: "Offert" }
+            { item: "Architecture, Découpage & Stratégie Technique", price: "400 €" },
+            { item: "Création du Design UI / UX sur-mesure", price: "800 €" },
+            { item: "Développement & Intégration Next.js", price: "1 000 €" },
+            { item: "Mise en place du Back-office (Airtable)", price: "500 €" },
+            { item: "Création du Workflow d'automatisation (n8n)", price: "290 €" },
+            { item: "Maintenance Applicative (Offerte 1 an)", price: "0 €" }
+        ],
+        extras: [
+            { icon: <Server size={20} />, label: "Hébergement & Nom de domaine", value: "Inclus (Géré par Axalys)" },
+            { icon: <Sparkles size={20} />, label: "Engagement Qualité", value: "Satisfait ou Remboursé" }
         ]
     }
 ];
 
 const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
     const slide = SLIDES_DATA[currentSlide];
+
+    const total = slide.pricing ? slide.pricing.reduce((acc, curr) => {
+        const price = curr.promo_price ? parsePrice(curr.promo_price) : parsePrice(curr.price);
+        return acc + price;
+    }, 0) : 0;
 
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % SLIDES_DATA.length);
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + SLIDES_DATA.length) % SLIDES_DATA.length);
@@ -100,9 +115,9 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                     <p className="text-slate-400 italic">{slide.subtitle}</p>
                                 </div>
                                 <img
-                                    src="/mockup-site.png"
+                                    src="simu-site-axalys.webp"
                                     alt="Maquette du site Axalys"
-                                    className="w-full h-auto rounded-xl shadow-2xl border border-white/10"
+                                    className="w-90 h-auto rounded-xl shadow-2xl border border-white/10"
                                 />
                             </div>
                         ) : (
@@ -158,17 +173,40 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                                                     {slide.pricing.map((p, i) => (
                                                         <tr key={i} className={`hover:bg-white/5 transition-colors ${p.item.includes('Option') ? 'text-[#00ade3] italic' : ''}`}>
                                                             <td className="p-5 text-sm text-slate-300">{p.item}</td>
-                                                            <td className="p-5 text-right font-mono font-bold">{p.price}</td>
+                                                            <td className="p-5 text-right font-mono font-bold">
+                                                                {p.promo_price ? (
+                                                                    <div className="flex flex-col items-end">
+                                                                        <span className="text-xs text-slate-500 line-through decoration-[#e50554]/50">{p.price}</span>
+                                                                        <span className="text-[#009e61]">{p.promo_price}</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    p.price
+                                                                )}
+                                                            </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                                 <tfoot className="bg-[#e50554]/20">
                                                     <tr>
                                                         <td className="p-6 font-black text-xl italic uppercase">Total Projet (HT)</td>
-                                                        <td className="p-6 text-right font-mono font-bold text-3xl text-[#e50554]">3 000 €</td>
+                                                        <td className="p-6 text-right font-mono font-bold text-3xl text-[#e50554]">{total.toLocaleString('fr-FR').replace(/\s/g, ' ')} €</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
+                                        </div>
+                                    )}
+
+                                    {slide.extras && (
+                                        <div className="mt-8 grid md:grid-cols-2 gap-4">
+                                            {slide.extras.map((extra, i) => (
+                                                <div key={i} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                                                    <div className="p-3 bg-white/5 rounded-full text-[#f7ab00]">{extra.icon}</div>
+                                                    <div>
+                                                        <p className="font-bold text-sm text-white mb-1">{extra.label}</p>
+                                                        <p className="text-xs text-[#00ade3] font-mono">{extra.value}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     )}
 
@@ -250,123 +288,153 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
 const PrintLayout = () => {
     return (
         <div className="bg-[#231838] text-white font-sans min-w-[210mm] w-[210mm] overflow-visible">
-            {SLIDES_DATA.map((slide, index) => (
-                <div
-                    key={slide.id}
-                    className={`print-slide w-[210mm] h-[296mm] flex flex-col relative overflow-hidden box-border ${index < SLIDES_DATA.length - 1 ? 'break-after-page page-break-always' : ''}`}
-                    style={{ pageBreakAfter: index < SLIDES_DATA.length - 1 ? 'always' : 'auto', pageBreakInside: 'avoid' }}
-                >
-                    {/* A4 Header */}
-                    <div className="h-[12mm] flex items-center justify-between px-[12mm] border-b border-white/10 shrink-0">
-                        <img src="/logo-yobart.png" alt="Yobart" className="h-10 w-auto" />
-                        <div className="text-slate-400 text-[9px] font-medium tracking-wide">
-                            Refonte Axalys • Slide {index + 1}/{SLIDES_DATA.length}
+            {SLIDES_DATA.map((slide, index) => {
+                const total = slide.pricing ? slide.pricing.reduce((acc, curr) => {
+                    const price = curr.promo_price ? parsePrice(curr.promo_price) : parsePrice(curr.price);
+                    return acc + price;
+                }, 0) : 0;
+
+                return (
+                    <div
+                        key={slide.id}
+                        className={`print-slide w-[210mm] h-[290mm] flex flex-col relative overflow-hidden box-border ${index < SLIDES_DATA.length - 1 ? 'break-after-page page-break-always' : ''}`}
+                        style={{ pageBreakAfter: index < SLIDES_DATA.length - 1 ? 'always' : 'auto', pageBreakInside: 'avoid' }}
+                    >
+                        {/* A4 Header */}
+                        <div className="h-[12mm] flex items-center justify-between px-[12mm] border-b border-white/10 shrink-0">
+                            <img src="/logo-yobart.png" alt="Yobart" className="h-10 w-auto" />
+                            <div className="text-slate-400 text-[9px] font-medium tracking-wide">
+                                Refonte Axalys • Slide {index + 1}/{SLIDES_DATA.length}
+                            </div>
+                        </div>
+
+                        {/* A4 Body - Fluid + Padding */}
+                        <div className="flex-1 flex flex-col p-[10mm] overflow-hidden">
+                            {slide.isMockup ? (
+                                <div className="flex flex-col items-center justify-center h-full">
+                                    <div className="text-center mb-6">
+                                        <h2 className="text-2xl text-white font-bold mb-2">{slide.title}</h2>
+                                        <p className="text-slate-400 italic text-xs">{slide.subtitle}</p>
+                                    </div>
+                                    <img
+                                        src="/mockup-site.png"
+                                        alt="Maquette"
+                                        className="max-h-[160mm] w-auto max-w-full rounded shadow-lg border border-white/10 object-contain"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="flex flex-col h-full">
+                                    {/* Title Section */}
+                                    <div className="mb-6 border-l-4 border-[#e50554] pl-4">
+                                        <h1 className="text-2xl text-white font-black leading-tight mb-1">
+                                            {slide.title}
+                                        </h1>
+                                        <p className="text-sm text-[#00ade3] font-medium italic">
+                                            {slide.subtitle}
+                                        </p>
+                                    </div>
+
+                                    {/* Content Grid */}
+                                    <div className="flex-1">
+                                        {slide.features && (
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {slide.features.map((f, i) => (
+                                                    <div key={i} className="flex gap-3 items-start p-2 border-b border-white/5 last:border-0">
+                                                        <div className="text-[#009e61] mt-0.5"><CheckCircle size={14} /></div>
+                                                        <div>
+                                                            <p className="font-bold text-white text-xs mb-0.5">{f.t}</p>
+                                                            <p className="text-[10px] text-slate-400 leading-tight">{f.d}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {slide.stack && (
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {slide.stack.map((s, i) => (
+                                                    <div key={i} className="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5">
+                                                        <div className="p-1.5 bg-white/5 rounded text-white">{React.cloneElement(s.icon, { size: 16 })}</div>
+                                                        <div>
+                                                            <p className="font-bold text-white text-xs uppercase">{s.name}</p>
+                                                            <p className="text-[10px] text-slate-400">{s.desc}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {slide.pricing && (
+                                            <div className="rounded-xl border border-white/10 overflow-hidden">
+                                                <table className="w-full text-left">
+                                                    <thead className="bg-white/5">
+                                                        <tr>
+                                                            <th className="p-2 text-[#f7ab00] font-bold text-[9px] uppercase">Phase</th>
+                                                            <th className="p-2 text-right text-[#f7ab00] font-bold text-[9px] uppercase">Prix</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-white/5">
+                                                        {slide.pricing.map((p, i) => (
+                                                            <tr key={i}>
+                                                                <td className="p-2 text-[10px] text-slate-300">{p.item}</td>
+                                                                <td className="p-2 text-right font-mono text-[10px] font-bold">
+                                                                    {p.promo_price ? (
+                                                                        <div className="flex flex-col items-end">
+                                                                            <span className="text-[8px] text-slate-500 line-through decoration-[#e50554]/50">{p.price}</span>
+                                                                            <span className="text-[#009e61]">{p.promo_price}</span>
+                                                                        </div>
+                                                                    ) : (
+                                                                        p.price
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                    <tfoot className="bg-[#e50554]/10">
+                                                        <tr>
+                                                            <td className="p-3 font-black text-xs uppercase italic">Total Projet</td>
+                                                            <td className="p-3 text-right font-mono font-bold text-lg text-[#e50554]">{total.toLocaleString('fr-FR').replace(/\s/g, ' ')} €</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        )}
+
+                                        {slide.extras && (
+                                            <div className="mt-4 grid grid-cols-2 gap-2">
+                                                {slide.extras.map((extra, i) => (
+                                                    <div key={i} className="flex items-center gap-2 p-2 bg-white/5 rounded-lg border border-white/5">
+                                                        <div className="p-1 bg-white/5 rounded text-[#f7ab00]">{React.cloneElement(extra.icon, { size: 12 })}</div>
+                                                        <div>
+                                                            <p className="font-bold text-[9px] text-white leading-tight">{extra.label}</p>
+                                                            <p className="text-[8px] text-[#00ade3] font-mono">{extra.value}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {slide.content && (
+                                            <div className="p-5 bg-white/5 rounded-2xl border-l-4 border-[#e50554] mt-2">
+                                                <p className="text-sm text-slate-200 font-medium leading-relaxed">
+                                                    "{slide.content}"
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* A4 Footer */}
+                        <div className="h-[15mm] flex items-center justify-center border-t border-white/10 bg-[#231838] shrink-0 mt-auto">
+                            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">
+                                Axalys Refonte • 2026
+                            </p>
                         </div>
                     </div>
-
-                    {/* A4 Body - Fluid + Padding */}
-                    <div className="flex-1 flex flex-col p-[10mm] overflow-hidden">
-                        {slide.isMockup ? (
-                            <div className="flex flex-col items-center justify-center h-full">
-                                <div className="text-center mb-6">
-                                    <h2 className="text-2xl text-white font-bold mb-2">{slide.title}</h2>
-                                    <p className="text-slate-400 italic text-xs">{slide.subtitle}</p>
-                                </div>
-                                <img
-                                    src="/mockup-site.png"
-                                    alt="Maquette"
-                                    className="max-h-[160mm] w-auto max-w-full rounded shadow-lg border border-white/10 object-contain"
-                                />
-                            </div>
-                        ) : (
-                            <div className="flex flex-col h-full">
-                                {/* Title Section */}
-                                <div className="mb-6 border-l-4 border-[#e50554] pl-4">
-                                    <h1 className="text-2xl text-white font-black leading-tight mb-1">
-                                        {slide.title}
-                                    </h1>
-                                    <p className="text-sm text-[#00ade3] font-medium italic">
-                                        {slide.subtitle}
-                                    </p>
-                                </div>
-
-                                {/* Content Grid */}
-                                <div className="flex-1">
-                                    {slide.features && (
-                                        <div className="grid grid-cols-1 gap-2">
-                                            {slide.features.map((f, i) => (
-                                                <div key={i} className="flex gap-3 items-start p-2 border-b border-white/5 last:border-0">
-                                                    <div className="text-[#009e61] mt-0.5"><CheckCircle size={14} /></div>
-                                                    <div>
-                                                        <p className="font-bold text-white text-xs mb-0.5">{f.t}</p>
-                                                        <p className="text-[10px] text-slate-400 leading-tight">{f.d}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {slide.stack && (
-                                        <div className="grid grid-cols-1 gap-2">
-                                            {slide.stack.map((s, i) => (
-                                                <div key={i} className="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5">
-                                                    <div className="p-1.5 bg-white/5 rounded text-white">{React.cloneElement(s.icon, { size: 16 })}</div>
-                                                    <div>
-                                                        <p className="font-bold text-white text-xs uppercase">{s.name}</p>
-                                                        <p className="text-[10px] text-slate-400">{s.desc}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {slide.pricing && (
-                                        <div className="rounded-xl border border-white/10 overflow-hidden">
-                                            <table className="w-full text-left">
-                                                <thead className="bg-white/5">
-                                                    <tr>
-                                                        <th className="p-2 text-[#f7ab00] font-bold text-[9px] uppercase">Phase</th>
-                                                        <th className="p-2 text-right text-[#f7ab00] font-bold text-[9px] uppercase">Prix</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="divide-y divide-white/5">
-                                                    {slide.pricing.map((p, i) => (
-                                                        <tr key={i} className={p.item.includes('Option') ? 'text-[#00ade3]' : ''}>
-                                                            <td className="p-2 text-[10px] text-slate-300">{p.item}</td>
-                                                            <td className="p-2 text-right font-mono text-[10px] font-bold">{p.price}</td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                                <tfoot className="bg-[#e50554]/10">
-                                                    <tr>
-                                                        <td className="p-3 font-black text-xs uppercase italic">Total Projet</td>
-                                                        <td className="p-3 text-right font-mono font-bold text-lg text-[#e50554]">3 000 €</td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    )}
-
-                                    {slide.content && (
-                                        <div className="p-5 bg-white/5 rounded-2xl border-l-4 border-[#e50554] mt-2">
-                                            <p className="text-sm text-slate-200 font-medium leading-relaxed">
-                                                "{slide.content}"
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* A4 Footer */}
-                    <div className="h-[15mm] flex items-center justify-center border-t border-white/10 bg-[#231838] shrink-0 mt-auto">
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">
-                            Axalys Refonte • 2026
-                        </p>
-                    </div>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };
