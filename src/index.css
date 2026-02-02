@@ -29,6 +29,9 @@
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
+        height: auto !important;
+        /* Allow height to be determined by content */
+        min-height: 0 !important;
         /* zoom: 0.9; - Removed for better visibility */
     }
 
@@ -36,8 +39,13 @@
     .print-slide {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-        width: 210mm !important;
-        height: 290mm !important;
+        width: 208mm !important;
+        /* Slightly reduced to prevent right-edge truncation */
+        height: 280mm !important;
+        /* Aggressively reduced to 280mm for Safari safety */
+        margin-left: auto;
+        margin-right: auto;
+        overflow: hidden !important;
     }
 
     /* Ensure no margins interfering */

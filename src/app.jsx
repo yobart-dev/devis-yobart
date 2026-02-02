@@ -14,7 +14,8 @@ import {
     Sparkles,
     Server,
     X,
-    BotIcon
+    BotIcon,
+    Quote
 } from 'lucide-react';
 
 const parsePrice = (priceStr) => {
@@ -36,7 +37,7 @@ const COMPANY_INFO = {
 const SLIDES_DATA = [
     {
         id: 'intro',
-        title: "Refonte Digitale Axalys",
+        title: "Refonte Site web Axalys",
         subtitle: "(ré)inventons votre présence en ligne.",
         icon: <img src="logo-axalys.png" className="w-32 md:w-48 h-auto" alt="Logo Axalys" />,
         content: "Plus qu’un simple site vitrine, nous concevons pour Axalys une plateforme de haute précision dédiée à votre univers et correspondant à votre image de marque. L’enjeu : propulser vos accessoires sur le devant de la scène numérique avec la même rigueur technique qui fait votre force au quotidien."
@@ -51,7 +52,7 @@ const SLIDES_DATA = [
             { t: "Ergonomie & Parcours Client", d: "Parcours utilisateur optimisé pour une navigation intuitive et efficace." },
             { t: "Espace Produits & Archive", d: "Navigation fluide avec filtres intelligents par familles de produits." },
             { t: "Fiches Techniques & Vidéos", d: "Intégration de médias et téléchargement direct de documentations PDF." },
-            { t: "Brand Experience", d: "Valorisation de votre outil de production, de votre histoire et de votre équipe." },
+            { t: "Brand Experience", d: "Traduction en 3 langues : Français, Anglais, Espagnol." },
             { t: "Contact & Lead Gen", d: "Formulaire qualifié pour un traitement commercial immédiat." },
             { t: "Stratégie SEO Sémantique", d: "Optimisation du contenu pour capter le trafic sur vos mots-clés techniques." },
             { t: "Optimisation GEO (AI Ready)", d: "Structure sémantique conçue pour être citée par les moteurs de recherche IA (ChatGPT, Perplexity...)." }
@@ -67,7 +68,7 @@ const SLIDES_DATA = [
             { name: "Next.js (SSG/ISR)", desc: "Le moteur ultra-performant. Rapidité éclair et mise à jour des pages sans redéploiement.", icon: <Rocket size={20} className="text-[#e50554]" /> },
             { name: "Airtable (Headless CMS)", desc: "Votre backoffice agile. Gestion du catalogue en toute autonomie.", icon: <Database size={20} className="text-[#00ade3]" /> },
             { name: "n8n (Workflow Engine)", desc: "Intelligence connectée pour automatiser vos flux de leads et notifications.", icon: <Settings size={20} className="text-[#009e61]" /> },
-            { name: "Optimisation Asset (Edge)", desc: "Gestion optimisée des images et vidéos pour un rendu instantané sur tous les écrans.", icon: <Zap size={20} className="text-[#f7ab00]" /> },
+            { name: "Optimisation Asset (Edge)", desc: "Gestion optimisée des images et vidéos pour un rendu rapide sur tous les écrans.", icon: <Zap size={20} className="text-[#f7ab00]" /> },
             { name: "Sécurité Serverless", desc: "Architecture sans serveur limitant drastiquement les surfaces d'attaque potentielles.", icon: <ShieldCheck size={20} className="text-[#009e61]" /> },
             { name: "Infrastructure Évolutive", desc: "Une base solide prête à intégrer de nouvelles fonctionnalités et outils.", icon: <Server size={20} className="text-[#e50554]" /> }
         ]
@@ -84,11 +85,11 @@ const SLIDES_DATA = [
         subtitle: "Un investissement structuré pour une solution pérenne.",
         icon: <ShieldCheck className="w-16 h-16 text-[#009e61]" />,
         pricing: [
-            { item: "Architecture, Découpage & Stratégie Technique", price: "400 €" },
+            { item: "Architecture, Découpage & Stratégie Technique", price: "300 €" },
             { item: "Création du Design UI / UX sur-mesure", price: "800 €" },
             { item: "Développement & Intégration Next.js", price: "1 000 €" },
-            { item: "Mise en place du Back-office (sur outil tiers Airtable, Notion ou autre)", price: "500 €" },
-            { item: "Création du Workflow d'automatisation (n8n)", price: "280 €" },
+            { item: "Mise en place du Back-office (sur outil tiers Airtable, Notion ou autre)", price: "510 €" },
+            { item: "Création du Workflow d'automatisation (n8n)", price: "385 €" },
             { item: "Maintenance Applicative (Offerte 1 an)", promo_price: "0 €", price: "550 €" }
         ],
         extras: [
@@ -349,7 +350,7 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
 
 const PrintLayout = () => {
     return (
-        <div className="bg-[#231838] text-white font-sans min-w-[210mm] w-[210mm] overflow-visible">
+        <div className="bg-[#231838] text-white font-sans min-w-[208mm] w-[208mm] overflow-visible print:h-auto">
             {SLIDES_DATA.map((slide, index) => {
                 const total = slide.pricing ? slide.pricing.reduce((acc, curr) => {
                     const price = curr.promo_price ? parsePrice(curr.promo_price) : parsePrice(curr.price);
@@ -359,7 +360,7 @@ const PrintLayout = () => {
                 return (
                     <div
                         key={slide.id}
-                        className={`print-slide w-[210mm] h-[290mm] flex flex-col relative overflow-hidden box-border ${index < SLIDES_DATA.length - 1 ? 'break-after-page page-break-always' : ''}`}
+                        className={`print-slide w-[208mm] h-[290mm] flex flex-col relative overflow-hidden box-border ${index < SLIDES_DATA.length - 1 ? 'break-after-page page-break-always' : ''}`}
                         style={{ pageBreakAfter: index < SLIDES_DATA.length - 1 ? 'always' : 'auto', pageBreakInside: 'avoid' }}
                     >
                         {/* A4 Header */}
@@ -372,7 +373,25 @@ const PrintLayout = () => {
 
                         {/* A4 Body - Fluid + Padding */}
                         <div className="flex-1 flex flex-col p-[10mm] overflow-hidden">
-                            {slide.id === 'contact' ? (
+                            {slide.id === 'intro' ? (
+                                <div className="flex flex-col items-center justify-center h-full text-center px-8 pt-10">
+                                    <div className="mb-12 scale-[2]">
+                                        {slide.icon}
+                                    </div>
+                                    <h1 className="text-5xl font-black mb-4 text-white leading-tight">
+                                        {slide.title}
+                                    </h1>
+                                    <p className="text-2xl text-[#00ade3] font-medium italic mb-16">
+                                        {slide.subtitle}
+                                    </p>
+                                    <div className="p-10 bg-white/5 rounded-[40px] border-l-8 border-[#e50554] shadow-2xl relative">
+                                        <Quote className="absolute -top-6 -left-6 text-[#e50554] bg-[#231838] rounded-full p-2" size={48} />
+                                        <p className="text-xl text-slate-200 leading-relaxed font-medium">
+                                            "{slide.content}"
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : slide.id === 'contact' ? (
                                 <div className="flex flex-col items-center justify-center h-full text-center pt-10">
                                     <div className="mb-8 scale-150">
                                         <img src="/logo-yobart.png" alt="Yobart" className="h-16 w-auto" />
@@ -405,7 +424,7 @@ const PrintLayout = () => {
                                         <p className="text-slate-400 italic text-xs">{slide.subtitle}</p>
                                     </div>
                                     <img
-                                        src="/mockup-site.png"
+                                        src="/simu-site-axalys.webp"
                                         alt="Maquette"
                                         className="max-h-[160mm] w-auto max-w-full rounded shadow-lg border border-white/10 object-contain"
                                     />
@@ -517,7 +536,7 @@ const PrintLayout = () => {
                         {/* A4 Footer */}
                         <div className="h-[15mm] flex items-center justify-center border-t border-white/10 bg-[#231838] shrink-0 mt-auto">
                             <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500">
-                                Axalys Refonte • 2026
+                                Axalys Refonte site web • 2026
                             </p>
                         </div>
                     </div>
@@ -537,7 +556,7 @@ const App = () => {
 
     if (isPdfMode) {
         return (
-            <div className="min-h-screen bg-[#231838] overflow-auto">
+            <div className={`bg-[#231838] overflow-auto ${isPdfMode ? 'print:h-auto print:overflow-visible' : 'min-h-screen'}`}>
                 <PrintLayout />
                 {/* Floating Controls for UX */}
                 <div className="fixed bottom-8 right-6 z-[9999] flex flex-col items-end gap-3 print:hidden">
