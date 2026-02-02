@@ -83,7 +83,7 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
             {/* Header */}
             <header className="fixed top-0 w-full flex justify-between items-center z-50 bg-[#231838]/80 backdrop-blur-md border-b border-white/5 h-20 px-6">
                 <div className="flex items-center gap-6">
-                    <img src="/logo-yobart.png" alt="Yobart" className="h-12 w-auto" />
+                    <img src="/logo-yobart.png" alt="Yobart" className="h-16 w-auto" />
                     <div className="h-6 w-px bg-white/10"></div>
                     <img src="logo-axalys.png" alt="Axalys" className="h-6 w-auto brightness-0 invert opacity-50" />
                 </div>
@@ -258,7 +258,7 @@ const PrintLayout = () => {
                 >
                     {/* A4 Header */}
                     <div className="h-[12mm] flex items-center justify-between px-[12mm] border-b border-white/10 shrink-0">
-                        <img src="logo-yobart.png" alt="Yobart" className="h-6 w-auto" />
+                        <img src="/logo-yobart.png" alt="Yobart" className="h-10 w-auto" />
                         <div className="text-slate-400 text-[9px] font-medium tracking-wide">
                             Refonte Axalys • Slide {index + 1}/{SLIDES_DATA.length}
                         </div>
@@ -385,22 +385,13 @@ const App = () => {
                 <PrintLayout />
                 {/* Floating Controls for UX */}
                 <div className="fixed bottom-8 right-6 z-[9999] flex flex-col items-end gap-3 print:hidden">
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <button
-                            onClick={() => window.print()}
-                            className="px-6 py-4 bg-[#00ade3] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#0091be] transition-colors flex items-center justify-center gap-2"
-                        >
-                            <Download size={20} />
-                            Télécharger
-                        </button>
-                        <button
-                            onClick={() => window.print()}
-                            className="px-6 py-4 bg-[#231838] border border-white/20 text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#1a1128] transition-colors flex items-center justify-center gap-2"
-                        >
-                            <Printer size={20} />
-                            Imprimer
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => window.print()}
+                        className="px-6 py-4 bg-[#00ade3] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#0091be] transition-colors flex items-center justify-center gap-2"
+                    >
+                        <Printer size={20} />
+                        Imprimer
+                    </button>
                     <button
                         onClick={() => setIsPdfMode(false)}
                         className="px-6 py-4 bg-[#e50554] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#c40448] transition-colors flex items-center justify-center gap-2 w-full md:w-auto"

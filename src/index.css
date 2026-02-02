@@ -29,15 +29,15 @@
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-        zoom: 0.9;
+        /* zoom: 0.9; - Removed for better visibility */
     }
 
     /* Prevent breaking inside slides and compensate for zoom to fill A4 */
     .print-slide {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-        width: 230mm !important;
-        height: 320mm !important;
+        width: 210mm !important;
+        height: 296mm !important;
     }
 
     /* Ensure no margins interfering */
