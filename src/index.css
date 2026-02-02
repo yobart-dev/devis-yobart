@@ -7,3 +7,22 @@
         @apply overflow-x-hidden bg-[#231838];
     }
 }
+
+@media print {
+    @page {
+        margin: 0;
+        size: auto;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        background-color: #231838 !important;
+        /* Force dark background */
+    }
+
+    .break-after-page {
+        break-after: page;
+        page-break-after: always;
+    }
+}
