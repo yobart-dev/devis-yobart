@@ -4,25 +4,45 @@
 
 @layer base {
     body {
-        @apply overflow-x-hidden bg-[#231838];
+        overflow-x: hidden;
+        background-color: #231838;
     }
 }
 
 @media print {
     @page {
+        size: A4 portrait;
         margin: 0;
-        size: auto;
     }
 
+    /* Ensure strict A4 width context to prevent mobile viewport squeezing */
+    /* Ensure strict A4 width context to prevent mobile viewport squeezing */
+    html,
     body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         background-color: #231838 !important;
-        /* Force dark background */
+        -webkit-text-size-adjust: none;
+        /* Prevent font boosting */
+        text-size-adjust: none;
+        overflow: visible !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        zoom: 0.9;
     }
 
-    .break-after-page {
-        break-after: page;
-        page-break-after: always;
+    /* Prevent breaking inside slides and compensate for zoom to fill A4 */
+    .print-slide {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        width: 230mm !important;
+        height: 320mm !important;
+    }
+
+    /* Ensure no margins interfering */
+    * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
     }
 }
