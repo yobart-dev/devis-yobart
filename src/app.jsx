@@ -10,6 +10,7 @@ import {
     Settings,
     CheckCircle,
     Download,
+    Printer,
     X
 } from 'lucide-react';
 
@@ -229,7 +230,7 @@ const WebLayout = ({ currentSlide, setCurrentSlide, handleExportPdf }) => {
                         className="px-6 py-3 rounded-full font-bold text-sm uppercase tracking-widest transition-all flex items-center gap-2 bg-[#00ade3] hover:brightness-110 text-white shadow-[0_0_20px_rgba(0,173,227,0.3)]"
                     >
                         <Download size={16} />
-                        Exporter PDF
+                        PDF
                     </button>
 
                     <button onClick={nextSlide} className="p-4 bg-[#e50554] hover:brightness-110 rounded-full transition-all shadow-[0_0_20px_rgba(229,5,84,0.3)] group active:scale-95">
@@ -383,17 +384,26 @@ const App = () => {
             <div className="min-h-screen bg-[#231838] overflow-auto">
                 <PrintLayout />
                 {/* Floating Controls for UX */}
-                <div className="fixed bottom-8 right-6 z-[9999] flex flex-col md:flex-row gap-4 print:hidden">
-                    <button
-                        onClick={() => window.print()}
-                        className="px-6 py-4 bg-[#00ade3] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#0091be] transition-colors flex items-center justify-center gap-2"
-                    >
-                        <Download size={20} />
-                        Lancer l'impression
-                    </button>
+                <div className="fixed bottom-8 right-6 z-[9999] flex flex-col items-end gap-3 print:hidden">
+                    <div className="flex flex-col md:flex-row gap-3">
+                        <button
+                            onClick={() => window.print()}
+                            className="px-6 py-4 bg-[#00ade3] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#0091be] transition-colors flex items-center justify-center gap-2"
+                        >
+                            <Download size={20} />
+                            Télécharger
+                        </button>
+                        <button
+                            onClick={() => window.print()}
+                            className="px-6 py-4 bg-[#231838] border border-white/20 text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#1a1128] transition-colors flex items-center justify-center gap-2"
+                        >
+                            <Printer size={20} />
+                            Imprimer
+                        </button>
+                    </div>
                     <button
                         onClick={() => setIsPdfMode(false)}
-                        className="px-6 py-4 bg-[#e50554] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#c40448] transition-colors flex items-center justify-center gap-2"
+                        className="px-6 py-4 bg-[#e50554] text-white rounded-full shadow-2xl font-black uppercase tracking-wider hover:bg-[#c40448] transition-colors flex items-center justify-center gap-2 w-full md:w-auto"
                     >
                         <X size={20} />
                         Fermer l'aperçu
